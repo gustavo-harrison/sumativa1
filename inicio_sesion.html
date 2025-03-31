@@ -15,7 +15,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom">
         <div class="container">
             <a class="navbar-brand d-flex aling-items-center" href="menu_principal.html">
-                <i class="bi bi-joystick fs-5 me-2"></i> <!-- icono joystick -->    
+                <i class="bi bi-joystick fs-5 me-2"></i>    
                 <strong>Store Games</strong>
             </a>
 
@@ -27,7 +27,7 @@
         </div>
     </nav>
 
-    <!-- Formulario de Inicio de Sesión -->
+    <!-------------------------- Formulario de Inicio de Sesión -------------------->
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
             <div class="col-md-8">
@@ -141,34 +141,5 @@
 <!-- Conectamos el framework Bootstrap a JavaScript -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-
-    <script>
-
-        
-        // Función para validar el formato del RUT
-        function validarRut() {
-            const rut = document.getElementById("rut").value;
-            const rutValido = /^([0-9]{1,8})-([0-9kK]{1})$/.test(rut);
-            let errorMensaje = document.getElementById("error-rut");
-    
-            if (!rutValido) {
-                errorMensaje.textContent = "Formato inválido. Ejemplo: 12345678-K";
-                return false;  
-            } else {
-                errorMensaje.textContent = "";
-                return true;  
-            }
-        }
-    
-        // Función para validar los datos y redirigir a la página principal
-        function validarYRedirigir() {
-            if (validarRut() && document.getElementById("password").value !== "") {
-                alert('¡Inicio de sesión exitoso!');
-                window.location.href = "menu_principal.html";  // Redirige al inicio o al dashboard
-            } else {
-                alert('Por favor, complete todos los campos correctamente.');
-            }
-        }
-    </script>
 </body>
 </html>
