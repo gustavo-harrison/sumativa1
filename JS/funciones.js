@@ -36,7 +36,7 @@ function validarformulariocontacto(){
 // ------------------------------ FUNCIÓN REGISTRO FORMULARIO -------------------------- //
 
 function datosformulario() {
-    // Recopilar los datos del formulario
+
     const rut = document.getElementById("rut").value.trim();
     const nombre = document.getElementById("nombre").value.trim();
     const apellidoP = document.getElementById("apellidoP").value.trim();
@@ -48,49 +48,107 @@ function datosformulario() {
     const region = document.getElementById("region").value.trim();
     const contrasena = document.getElementById("contrasena").value.trim();
 
-    // Validaciones de los campos
     if (!rut || !nombre || !apellidoP || !apellidoM || !direccion || !comuna || !telefono || !correo || !region || !contrasena) {
         alert("Por favor, ingrese todos los campos seleccionados");
         return;
     }
-    
-    console.log("Datos del formulario: ");
-    console.log(rut);
-    console.log(nombre);
-    console.log(apellidoP);
-    console.log(apellidoM);
-    console.log(direccion);
-    console.log(comuna);
-    console.log(telefono);
-    console.log(correo);
-    console.log(region);
-    console.log(contrasena);
+
+    if (!validarRut()) {
+        return; 
+    }
+    if (!validarTelefono()) {
+        return; 
+    }
+
+    if (!validarContrasena()) {
+        return; 
+    }
+
+    const datosFormulario = {
+        rut,
+        nombre,
+        apellidoP,
+        apellidoM,
+        direccion,
+        comuna,
+        telefono,
+        correo,
+        region,
+        contrasena
+    };
+
+    localStorage.setItem("datosFormulario", JSON.stringify(datosFormulario));
+
+    console.log("Datos del formulario almacenados en localStorage: ");
+    console.log(datosFormulario);
+    alert("Los datos han sido ingresados correctamente");
 }
-
-
 
 
 // ------------------------------ FUNCIÓN INICIO DE SESIÓN -------------------------- //
 
-function validarYRedirigir() {
-    const rutInput = document.getElementById("rut").value.trim();
-    const contrasenaInput = document.getElementById("contrasena").value.trim();
-    
-    // Verificar si los datos están en el localStorage
-    const datosformulario = JSON.parse(localStorage.getItem("datosFormulario"));
+function inicioSesion() {
 
-    // Verificar si los datos del formulario existen en el localStorage
-    if (datosformulario) {
-        // Compara el RUT y la contraseña
-        if (datosformulario.rut === rutInput && datosformulario.contrasena === contrasenaInput) {
-            alert("Inicio de sesión exitoso.");
-            // Redirigir a otra página después del inicio de sesión
-            window.location.href = "menu_principal.html"; // Cambia a la página de destino después del login
-        } else {
-            alert("RUT o contraseña incorrectos.");
-        }
+    const rutIngresado = document.getElementById("rut").value.trim();
+    const contrasenaIngresada = document.getElementById("contrasena").value.trim();
+    const datosFormulario = JSON.parse(localStorage.getItem("datosFormulario"));
+
+    if (!datosFormulario) {
+        alert("Usuario no se encuentra en nuestros registros");
+        return;
+    }
+
+    if (rutIngresado === datosFormulario.rut && contrasenaIngresada === datosFormulario.contrasena) {
+        window.location.href = "menu_principal.html";
     } else {
-        alert("No hay datos de registro guardados.");
+        alert("ERROR");
     }
 }
 
+// ------------------------------ VALIDACIONES -------------------------- //
+
+function validarRut() {
+    const rut = document.getElementById("rut").value;
+    const rutValido = /^([0-9]{1,8})-([0-9kK]{1})$/.test(rut);
+    let errorMensaje = document.getElementById("error-rut");
+
+    if (!rutValido) {
+        errorMensaje.textContent = "Formato inválido. Ejemplo: 18604555-K";
+        return false;  
+    } else {
+        errorMensaje.textContent = "";
+        return true;  
+    }
+}
+
+// ------
+
+function validarTelefono() {
+    const telefono = document.getElementById("telefono").value;
+    const telefonoValido = /^\+\d{11}$/.test(telefono);
+    let errorMensaje = document.getElementById("error-telefono");
+
+    if (!telefonoValido) {
+        errorMensaje.textContent = "Formato inválido. Ejemplo: +56912345678";
+        return false;  
+    } else {
+        errorMensaje.textContent = "";
+        return true;  
+    }
+}
+
+//-----
+
+function validarContrasena() {
+    const contrasena = document.getElementById("contrasena").value;
+    const contrasenaValida = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/.test(contrasena);
+    let errorMensaje = document.getElementById("error-contrasena");
+
+    if (!contrasenaValida) {
+        errorMensaje.textContent = "La contraseña debe tener al menos 8 caracteres y ser alfanumérica.";
+        return false;  
+    } else {
+        errorMensaje.textContent = "";
+        return true;  
+    }
+}
